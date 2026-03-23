@@ -8,8 +8,9 @@ from flask import Flask
 # 🔐 ENV variables (Railway से आएँगे)
 api_id = int(os.getenv("API_ID"))
 api_hash = os.getenv("API_HASH")
+bot_token = os.getenv("BOT_TOKEN")
 
-client = TelegramClient("session", api_id, api_hash)
+client = TelegramClient("bot", api_id, api_hash).start(bot_token=bot_token)
 
 # 🔄 dynamic channel map
 CHANNEL_MAP = {}
@@ -168,7 +169,5 @@ async def main():
 # 🧠 run both bot + web
 import threading
 threading.Thread(target=run_web).start()
-
-with client:
-    client.loop.run_until_complete(main())
-    client.run_until_disconnected()
+client.loop.run_until_complete(main())
+client.run_until_disconnected()
