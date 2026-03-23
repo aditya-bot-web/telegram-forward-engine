@@ -11,6 +11,9 @@ api_hash = os.getenv("API_HASH")
 bot_token = os.getenv("BOT_TOKEN")
 
 client = TelegramClient("bot", api_id, api_hash).start(bot_token=bot_token)
+@client.on(events.NewMessage(pattern="/start"))
+async def start(event):
+    await event.reply("✅ Bot is running successfully!")
 
 # 🔄 dynamic channel map
 CHANNEL_MAP = {}
