@@ -17,7 +17,31 @@ async def start(event):
 
 # 🔄 dynamic channel map
 CHANNEL_MAP = {}
+@client.on(events.NewMessage(pattern="/add"))
+async def add_cmd(e):
+    try:
+        _, src, tgt = e.text.split()
+        CHANNEL_MAP[int(src)] = int(tgt)
+        await e.reply(f"✅ Added\n{src} → {tgt}")
+    except:
+        await e.reply("❌ Use: /add source target")
 
+@client.on(events.NewMessage(pattern="/list"))
+async def list_cmd(e):
+    if not CHANNEL_MAP:
+        await e.reply("Empty ❌")
+    else:
+        msg = "\n".join([f"{s} → {t}" for s, t in CHANNEL_MAP.items()])
+        await e.reply(msg)
+
+@client.on(events.NewMessage(pattern="/remove"))
+async def remove_cmd(e):
+    try:
+        _, src = e.text.split()
+        CHANNEL_MAP.pop(int(src))
+        await e.reply(f"❌ Removed {src}")
+    except:
+        await e.reply("Error")
 # 📊 stats
 stats = {
     "count": 0,
